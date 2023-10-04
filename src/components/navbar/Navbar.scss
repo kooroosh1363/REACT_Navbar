@@ -1,0 +1,35 @@
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: hsla(0, 0%, 98%, 0.77);
+
+    .logo{
+        margin-left: 1rem;
+        color: rgb(86, 4, 113);
+        font-size: 1.8rem;
+        font-weight: 900;
+    }
+
+    .lists{
+        display: flex;
+        .nav_lists{
+            display: flex;
+            margin: 1.563rem;
+
+            li{
+                margin: 0 1rem;
+
+                a{
+                    color: hsla(163, 96%, 22%, 1);
+                    font-weight: 600;
+                    font-size: 1.2rem;
+                }
+                a:hover{
+                    color: hsla(73, 97%, 90%, 1);
+                }
+            }
+        }
+    }
+    
+}
