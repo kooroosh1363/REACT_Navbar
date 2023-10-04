@@ -1,14 +1,12 @@
 import React from 'react'
-import "./Careers.scss";
 import Navbar from '../../components/navbar/Navbar';
 
-const Careers = () => {
+const Home = () => {
   return (
     <div>
       <Navbar/>
-      
     </div>
   )
 }
 
-export default Careers;
+export default Home;

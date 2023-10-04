@@ -1,8 +1,7 @@
 import React from 'react'
 import Navbar from '../../components/navbar/Navbar'
-import "./About.scss"
 
-const About = () => {
+const Products = () => {
   return (
     <div>
       <Navbar/>
@@ -10,4 +9,4 @@ const About = () => {
   )
 }
 
-export default About
+export default Products
