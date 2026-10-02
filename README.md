@@ -1,70 +1,174 @@
-# Getting Started with Create React App
+# BEACON — Route-Aware Navigation Shell
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+BEACON modernizes a 2023 React navbar exercise into a focused navigation-engineering project.
 
-## Available Scripts
+The original repository had a visible five-item navbar, but its route contract was incorrect: `/ABOUT`, `/PRODUCTS`, and `/CONTACT` all rendered the Careers component. Most route pages contained only the navbar, the project depended on Create React App, React Router, Sass, and Web Vitals for a tiny demo, and the visual layer loaded a 3.08 MB decorative background plus a large Google Fonts request.
 
-In the project directory, you can run:
+## Engineering focus
 
-### `npm start`
+BEACON demonstrates navigation as application state:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- one canonical route registry
+- active-route semantics
+- `aria-current="page"`
+- static-host-safe hash navigation
+- unknown-route detection and recovery
+- route-aware document titles
+- semantic mobile disclosure
+- Escape-to-close
+- close-on-route-change
+- close-on-desktop-transition
+- arrow-key navigation across primary links
+- Home / End keyboard shortcuts
+- skip navigation
+- reduced-motion support
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Architecture
 
-### `npm test`
+```text
+src/data/routes.js
+        │
+        ▼
+src/lib/navigation.js
+        ├─ path normalization
+        ├─ route lookup
+        ├─ canonical hash generation
+        ├─ page-title policy
+        ├─ keyboard index policy
+        └─ mobile navigation reducer
+        │
+        ▼
+src/App.jsx
+        ├─ hashchange integration
+        ├─ responsive menu lifecycle
+        ├─ active-route rendering
+        ├─ keyboard focus movement
+        └─ explicit not-found state
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Route behavior is deliberately isolated from React so it can be tested as deterministic policy.
 
-### `npm run build`
+## Why hash routing?
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+This project is intended for static GitHub Pages deployment.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Hash routes such as:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```text
+#/routing
+#/accessibility
+#/responsive
+```
 
-### `npm run eject`
+are resolved entirely in the browser. Refreshing or opening a deep link therefore does not require server-side rewrite rules.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Route contract
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The registry currently contains:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- Overview — `/`
+- Routing — `/routing`
+- Accessibility — `/accessibility`
+- Responsive — `/responsive`
+- Diagnostics — `/diagnostics`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Unknown paths are not redirected silently. BEACON renders an explicit route-mismatch state and preserves the attempted path for diagnostics.
 
-## Learn More
+## Accessibility
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- semantic `nav`
+- semantic mobile menu button
+- `aria-expanded`
+- `aria-controls`
+- `aria-current="page"`
+- visible keyboard focus
+- skip link
+- Escape handling
+- Arrow Up / Down / Left / Right navigation
+- Home / End navigation
+- responsive controls
+- reduced-motion support
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Modernization summary
 
-### Code Splitting
+- Create React App → Vite
+- React 18 → React 19
+- removed React Router
+- removed Sass
+- removed Web Vitals
+- removed CRA test/public boilerplate
+- removed empty page-specific Sass files
+- removed 3.08 MB decorative background image
+- removed oversized Google Fonts import
+- fixed incorrect route-to-component mapping
+- replaced empty placeholder pages with one registry-driven shell
+- added explicit unknown-route handling
+- added Vitest, CI, Pages deployment, and professional documentation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Local development
 
-### Analyzing the Bundle Size
+Requirements:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- Node.js 22+
+- npm
 
-### Making a Progressive Web App
+```bash
+npm install --legacy-peer-deps --no-audit --no-fund
+npm run dev
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Tests
 
-### Advanced Configuration
+```bash
+npm test
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+The suite covers:
 
-### Deployment
+- empty-path normalization
+- hash normalization
+- query stripping
+- duplicate-slash cleanup
+- registered route lookup
+- unknown route detection
+- canonical hash generation
+- route-aware document titles
+- not-found document title
+- forward keyboard wrapping
+- backward keyboard wrapping
+- Home / End keyboard movement
+- empty navigation handling
+- mobile menu open/toggle
+- route-change close
+- Escape close
+- desktop-transition close
+- viewport breakpoint policy
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Quality gate
 
-### `npm run build` fails to minify
+```bash
+npm run check
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This runs syntax checks, Vitest, and a Vite production build.
+
+## CI
+
+`.github/workflows/quality.yml` runs on pull requests and pushes to `main`.
+
+## Deployment
+
+BEACON includes a manual GitHub Pages workflow.
+
+1. Open **Settings → Pages**.
+2. Set **Source** to **GitHub Actions**.
+3. Open **Actions → Deploy Pages**.
+4. Run the workflow.
+
+## Security review
+
+No credentials, API keys, tokens, passwords, backend endpoints, authentication flows, sensitive browser storage, or user-controlled HTML injection are required.
+
+## License
+
+MIT. See [LICENSE](./LICENSE).
